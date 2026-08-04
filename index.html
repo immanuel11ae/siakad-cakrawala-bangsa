@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIAKAD — SMA Cakrawala Bangsa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+  :root{
+    --navy-950:#0A1F38;
+    --navy-900:#0F2A4A;
+    --navy-700:#1E4976;
+    --navy-500:#3C6591;
+    --paper:#FAF8F3;
+    --paper-line:#E4DFD2;
+    --gold:#C9A227;
+    --gold-soft:#E9D48B;
+    --ink:#232823;
+    --ink-soft:#5B6360;
+    --green:#2F6B4F;
+    --red:#9B3B34;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #root{min-height:100vh;display:flex;flex-direction:column;}
+  h1,h2,h3,.serif{font-family:'Fraunces',serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;cursor:pointer;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .ledger-bg-fine{
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size: 40px 34px, 40px 34px;
+  }
+
+  /* ===== Nav ===== */
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;
+    background:var(--navy-900);
+    color:var(--paper);
+    position:sticky;top:0;z-index:50;
+    border-bottom:3px solid var(--gold);
+  }
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-text .name{font-family:'Fraunces',serif;font-size:19px;font-weight:600;letter-spacing:.2px;line-height:1.1;}
+  .brand-text .sub{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-soft);margin-top:3px;}
+  .nav-links{display:flex;gap:32px;align-items:center;}
+  .nav-links a{font-size:14px;letter-spacing:.3px;color:#DCE4EC;transition:color .15s;}
+  .nav-links a:hover{color:var(--gold-soft);}
+  .nav-cta{
+    background:var(--gold);color:var(--navy-950);padding:10px 22px;
+    font-size:13px;font-weight:600;letter-spacing:.4px;border:none;border-radius:var(--radius);
+  }
+  .nav-cta:hover{background:var(--gold-soft);}
+  .nav-ghost-cta{
+    background:transparent;color:#DCE4EC;padding:9px 16px;border:1px solid rgba(255,255,255,.3);
+    font-size:13px;font-weight:600;border-radius:var(--radius);
+  }
+  .nav-ghost-cta:hover{border-color:var(--gold-soft);color:var(--gold-soft);}
+
+  /* ===== Hero ===== */
+  .hero{
+    padding:110px 48px 90px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;
+    max-width:1280px;margin:0 auto;
+  }
+  .eyebrow{
+    font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--navy-500);
+    display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);}
+  .hero h1{
+    font-size:clamp(34px,4.2vw,52px);line-height:1.08;font-weight:600;color:var(--navy-950);
+    margin:0 0 22px;
+  }
+  .hero h1 em{font-style:italic;color:var(--navy-700);}
+  .hero p{font-size:16.5px;line-height:1.7;color:var(--ink-soft);max-width:480px;margin:0 0 34px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--navy-900);color:var(--paper);padding:14px 26px;border:none;border-radius:var(--radius);
+    font-size:14px;font-weight:600;letter-spacing:.3px;
+  }
+  .btn-primary:hover{background:var(--navy-700);}
+  .btn-ghost{
+    background:transparent;color:var(--navy-900);padding:14px 26px;border:1px solid var(--navy-900);border-radius:var(--radius);
+    font-size:14px;font-weight:600;letter-spacing:.3px;
+  }
+  .btn-ghost:hover{background:var(--navy-950);color:var(--paper);}
+
+  .hero-panel{
+    background:var(--navy-950);border:1px solid var(--navy-700);border-radius:4px;
+    padding:0;position:relative;overflow:hidden;
+  }
+  .hero-panel .ledger-bg-fine{position:absolute;inset:0;opacity:.35;background-image:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);}
+  .hero-panel-inner{position:relative;padding:36px 32px;color:var(--paper);}
+  .hero-panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-soft);margin-bottom:18px;}
+  .stat-row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12);}
+  .stat-row:last-child{border-bottom:none;}
+  .stat-row .label{font-size:13px;color:#B9C4D0;}
+  .stat-row .val{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--gold-soft);}
+
+  /* ===== Section generic ===== */
+  .section{padding:80px 48px;max-width:1280px;margin:0 auto;}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;gap:20px;flex-wrap:wrap;}
+  .section-head h2{font-size:30px;font-weight:600;color:var(--navy-950);margin:0;}
+  .section-head p{color:var(--ink-soft);max-width:420px;font-size:14.5px;line-height:1.6;margin:0;}
+  .num-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:1px;margin-bottom:10px;display:block;}
+
+  .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .info-card{
+    border:1px solid var(--paper-line);background:#fff;padding:30px 26px;border-radius:3px;
+    border-top:3px solid var(--navy-900);
+  }
+  .info-card h3{font-size:17px;margin:0 0 10px;color:var(--navy-950);}
+  .info-card p{font-size:14px;color:var(--ink-soft);line-height:1.65;margin:0;}
+  .info-card.clickable{cursor:pointer;transition:transform .15s, box-shadow .15s;}
+  .info-card.clickable:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(15,42,74,.25);}
+
+  .divider{border:none;border-top:1px solid var(--paper-line);}
+
+  footer{background:var(--navy-950);color:#9FB0C2;padding:50px 48px 30px;margin-top:auto;}
+  footer .foot-grid{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;}
+  footer h4{color:var(--paper);font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:0 0 12px;}
+  footer .foot-bottom{max-width:1280px;margin:34px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  /* ===== Auth pages (login / ppdb) shared shell ===== */
+  .auth-wrap{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    padding:60px 24px;position:relative;
+  }
+  .auth-wrap::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size:36px 36px;opacity:.6;
+  }
+  .auth-card{
+    position:relative;width:100%;background:#fff;border:1px solid var(--paper-line);
+    border-top:4px solid var(--navy-900);border-radius:3px;padding:44px 38px;
+    box-shadow:0 24px 60px -20px rgba(15,42,74,.25);
+  }
+  .auth-card.narrow{max-width:400px;}
+  .auth-card.wide{max-width:640px;}
+  .login-crest{display:flex;justify-content:center;margin-bottom:18px;}
+  .auth-card h2{text-align:center;font-size:21px;margin:0 0 4px;color:var(--navy-950);}
+  .auth-card .sub{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-bottom:28px;letter-spacing:.3px;}
+
+  .role-toggle{display:flex;gap:8px;margin-bottom:24px;background:var(--paper);padding:5px;border-radius:3px;border:1px solid var(--paper-line);}
+  .role-toggle button{
+    flex:1;padding:9px;border:none;background:transparent;border-radius:2px;font-size:12.5px;font-weight:600;
+    letter-spacing:.3px;color:var(--ink-soft);
+  }
+  .role-toggle button.active{background:var(--navy-900);color:#fff;}
+
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:12px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--navy-700);margin-bottom:7px;}
+  .field input,.field select,.field textarea{
+    width:100%;padding:12px 13px;border:1px solid #CBD3DA;border-radius:2px;font-size:14.5px;font-family:inherit;
+    background:#FCFCFB;
+  }
+  .field textarea{resize:vertical;min-height:70px;}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--navy-700);outline-offset:1px;border-color:var(--navy-700);}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:5px;}
+
+  .btn-block{
+    width:100%;background:var(--navy-900);color:#fff;padding:13px;border:none;border-radius:2px;
+    font-size:14px;font-weight:600;letter-spacing:.4px;margin-top:6px;
+  }
+  .btn-block:hover{background:var(--navy-700);}
+  .btn-block:disabled{opacity:.6;cursor:default;}
+  .btn-block.secondary{background:transparent;border:1px solid var(--navy-900);color:var(--navy-900);}
+  .btn-block.secondary:hover{background:var(--navy-950);color:#fff;}
+
+  .alert{padding:10px 12px;font-size:13px;border-radius:2px;margin-bottom:16px;}
+  .alert.error{background:#FBEAE8;color:var(--red);border:1px solid #E9C6C2;}
+  .alert.success{background:#E9F3ED;color:var(--green);border:1px solid #C5DFD1;}
+
+  .demo-box{margin-top:26px;padding:16px;background:var(--paper);border:1px dashed var(--paper-line);border-radius:2px;}
+  .demo-box .t{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--navy-700);font-weight:600;margin-bottom:9px;}
+  .demo-acc{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12.5px;padding:5px 0;color:var(--ink-soft);}
+  .demo-acc:hover{color:var(--navy-900);}
+  .back-link{display:block;text-align:center;margin-top:20px;font-size:13px;color:var(--navy-700);}
+  .back-link:hover{text-decoration:underline;}
+
+  /* PPDB extras */
+  .ppdb-tabs{display:flex;gap:8px;margin-bottom:24px;}
+  .ppdb-tab{flex:1;padding:10px;border:1px solid var(--paper-line);background:#fff;border-radius:2px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .ppdb-tab.active{background:var(--navy-900);color:#fff;border-color:var(--navy-900);}
+  .reg-number{
+    font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:var(--navy-900);
+    background:var(--paper);border:1px dashed var(--gold);padding:16px;text-align:center;border-radius:2px;margin-bottom:18px;
+    letter-spacing:1px;
+  }
+  .status-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--paper-line);font-size:13.5px;}
+  .status-row:last-child{border-bottom:none;}
+  .status-row .k{color:var(--ink-soft);}
+  .status-row .v{font-weight:600;color:var(--navy-950);}
+
+  /* ===== Dashboard ===== */
+  .dash{display:flex;flex:1;}
+  .sidebar{width:250px;flex-shrink:0;background:var(--navy-950);color:#C9D3DD;padding:26px 0;display:flex;flex-direction:column;}
+  .sidebar .who{padding:0 24px 22px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px;}
+  .sidebar .who .avatar{
+    width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--navy-950);
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:17px;margin-bottom:10px;
+  }
+  .sidebar .who .n{color:#fff;font-size:14.5px;font-weight:600;}
+  .sidebar .who .r{font-size:11.5px;color:#8FA0B2;margin-top:2px;}
+  .role-pill{
+    display:inline-block;margin-top:8px;font-size:10px;letter-spacing:.6px;text-transform:uppercase;
+    background:rgba(201,162,39,.16);color:var(--gold-soft);padding:3px 9px;border-radius:20px;font-weight:600;
+  }
+  .side-link{display:flex;align-items:center;gap:11px;padding:12px 24px;font-size:14px;color:#B9C4D0;border-left:3px solid transparent;}
+  .side-link:hover{background:rgba(255,255,255,.04);color:#fff;}
+  .side-link.active{background:rgba(201,162,39,.1);border-left-color:var(--gold);color:#fff;font-weight:600;}
+  .side-link .ic{width:16px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-soft);}
+  .sidebar-bottom{margin-top:auto;padding:14px 24px 0;}
+  .logout-btn{width:100%;background:transparent;border:1px solid rgba(255,255,255,.18);color:#C9D3DD;padding:10px;font-size:13px;border-radius:2px;letter-spacing:.3px;}
+  .logout-btn:hover{background:rgba(255,255,255,.06);color:#fff;}
+
+  .dash-main{flex:1;padding:40px 48px;background:var(--paper);}
+  .dash-head{margin-bottom:32px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;}
+  .dash-head .eyebrow2{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--navy-500);margin-bottom:6px;}
+  .dash-head h1{font-size:26px;color:var(--navy-950);margin:0;}
+  .print-btn{
+    background:var(--navy-900);color:#fff;border:none;padding:11px 20px;border-radius:2px;font-size:13px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .print-btn:hover{background:var(--navy-700);}
+
+  .tab-panel{background:#fff;border:1px solid var(--paper-line);border-radius:3px;overflow:hidden;}
+  table.grades{width:100%;border-collapse:collapse;}
+  table.grades th{
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--navy-700);
+    background:var(--paper);padding:13px 20px;border-bottom:1px solid var(--paper-line);font-weight:600;
+  }
+  table.grades td{padding:13px 20px;border-bottom:1px solid #F0EDE4;font-size:14px;color:var(--ink);}
+  table.grades tr:last-child td{border-bottom:none;}
+  .grade-val{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+  .grade-val.good{color:var(--green);}
+  .grade-val.mid{color:var(--gold);}
+  .grade-val.low{color:var(--red);}
+  .sem-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .sem-tab{padding:8px 16px;border:1px solid var(--paper-line);background:#fff;border-radius:2px;font-size:13px;color:var(--ink-soft);}
+  .sem-tab.active{background:var(--navy-900);color:#fff;border-color:var(--navy-900);}
+
+  .schedule-grid{display:grid;grid-template-columns:80px repeat(5,1fr);border:1px solid var(--paper-line);border-radius:3px;overflow:hidden;background:#fff;}
+  .sched-h{background:var(--navy-900);color:#fff;padding:11px 8px;font-size:11.5px;text-align:center;font-weight:600;letter-spacing:.3px;}
+  .sched-time{background:var(--paper);padding:10px 8px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);text-align:center;border-top:1px solid var(--paper-line);display:flex;align-items:center;justify-content:center;}
+  .sched-cell{padding:8px 7px;border-top:1px solid var(--paper-line);border-left:1px solid var(--paper-line);font-size:11.5px;line-height:1.35;min-height:52px;}
+  .sched-cell.filled{background:#F7F6F0;}
+  .sched-cell .subj{font-weight:600;color:var(--navy-950);}
+
+  .eskul-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:24px;}
+  .eskul-item{border:1px solid var(--paper-line);border-radius:3px;padding:18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .eskul-item .name{font-weight:600;color:var(--navy-950);font-size:14.5px;margin-bottom:4px;}
+  .eskul-item .desc{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+  .badge{font-size:10.5px;padding:4px 9px;border-radius:20px;font-weight:600;white-space:nowrap;letter-spacing:.3px;}
+  .badge.joined{background:#E5F0EA;color:var(--green);}
+  .badge.open{background:#F1F0EC;color:var(--ink-soft);}
+  .eskul-action{font-size:11px;background:none;border:none;color:var(--navy-700);text-decoration:underline;}
+  .eskul-action:disabled{color:#B7BEC4;text-decoration:none;cursor:default;}
+
+  .panel-pad{padding:24px;}
+  .note-box{background:var(--paper);border:1px solid var(--paper-line);border-radius:2px;padding:14px 16px;font-size:12.5px;color:var(--ink-soft);margin-bottom:20px;}
+
+  /* ===== Print / PDF rapor ===== */
+  .print-only{display:none;}
+  #rapor-print{
+    padding:50px 60px;font-family:'IBM Plex Sans',sans-serif;color:#1a1a1a;
+  }
+  #rapor-print .rp-head{display:flex;align-items:center;gap:18px;border-bottom:3px double #0F2A4A;padding-bottom:18px;margin-bottom:26px;}
+  #rapor-print .rp-head h2{margin:0;font-size:20px;}
+  #rapor-print .rp-head .rp-sub{font-size:12px;color:#555;margin-top:2px;}
+  #rapor-print .rp-bio{display:grid;grid-template-columns:1fr 1fr;gap:6px 30px;margin-bottom:24px;font-size:13px;}
+  #rapor-print .rp-bio .k{color:#555;display:inline-block;width:130px;}
+  #rapor-print table{width:100%;border-collapse:collapse;margin-bottom:30px;}
+  #rapor-print th,#rapor-print td{border:1px solid #999;padding:8px 10px;font-size:12.5px;text-align:left;}
+  #rapor-print th{background:#eee;}
+  #rapor-print .rp-sign{display:flex;justify-content:space-between;margin-top:60px;font-size:12.5px;text-align:center;}
+  #rapor-print .rp-sign div{width:30%;}
+  #rapor-print .rp-sign .line{margin-top:60px;border-top:1px solid #333;padding-top:6px;}
+
+  @media print{
+    body *{visibility:hidden;}
+    #rapor-print, #rapor-print *{visibility:visible;}
+    #rapor-print{position:absolute;top:0;left:0;width:100%;display:block !important;}
+  }
+
+  @media (max-width:900px){
+    .nav-links{display:none;}
+    .hero{grid-template-columns:1fr;padding:70px 24px 50px;}
+    .card-grid{grid-template-columns:1fr;}
+    .section{padding:56px 24px;}
+    .dash{flex-direction:column;}
+    .sidebar{width:100%;flex-direction:row;overflow-x:auto;padding:14px;align-items:center;}
+    .sidebar .who{display:none;}
+    .side-link{padding:8px 14px;white-space:nowrap;border-left:none;border-bottom:3px solid transparent;}
+    .side-link.active{border-left:none;border-bottom-color:var(--gold);}
+    .sidebar-bottom{margin-top:0;padding:0 0 0 8px;}
+    .dash-main{padding:26px 20px;}
+    .schedule-grid{grid-template-columns:60px repeat(5,1fr);font-size:10px;}
+    .eskul-list{grid-template-columns:1fr;}
+    .field-row{grid-template-columns:1fr;}
+    .auth-card{padding:32px 22px;}
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect } = React;
+
+/* ---------------- Crest (original, geometric) ---------------- */
+function Crest({ size = 38, light = true }) {
+  const stroke = light ? "#C9A227" : "#0F2A4A";
+  const fill = light ? "#0F2A4A" : "#FAF8F3";
+  return (
+    <svg width={size} height={size * 1.15} viewBox="0 0 40 46" fill="none">
+      <path d="M20 2 L37 9 V22 C37 33 30 41 20 44 C10 41 3 33 3 22 V9 Z" fill={fill} stroke={stroke} strokeWidth="1.4"/>
+      <path d="M20 10 L20 34 M12 16 L28 16 M13 24 L27 24" stroke={stroke} strokeWidth="1.3" strokeLinecap="round"/>
+      <circle cx="20" cy="10" r="2.2" fill={stroke}/>
+    </svg>
+  );
+}
+
+const SCHOOL = "SMA Cakrawala Bangsa";
+const KKM = 75;
+
+const SEED_STUDENTS = [
+  {
+    nisn: "0091234501", password: "siswa123", waliPassword: "wali123",
+    name: "Aditya Pramana", kelas: "XI IPA 2", wali: "Bpk. Sutrisno", initials: "AP",
+    grades: {
+      "Ganjil 2025/2026": [
+        { subj: "Matematika Wajib", uh: 88, uts: 82, uas: 85, akhir: 85 },
+        { subj: "Fisika", uh: 79, uts: 75, uas: 80, akhir: 78 },
+        { subj: "Kimia", uh: 91, uts: 88, uas: 90, akhir: 90 },
+        { subj: "Bahasa Indonesia", uh: 84, uts: 86, uas: 83, akhir: 84 },
+        { subj: "Bahasa Inggris", uh: 90, uts: 85, uas: 88, akhir: 88 },
+        { subj: "PPKn", uh: 87, uts: 84, uas: 86, akhir: 86 },
+      ],
+      "Genap 2024/2025": [
+        { subj: "Matematika Wajib", uh: 80, uts: 78, uas: 82, akhir: 80 },
+        { subj: "Fisika", uh: 74, uts: 70, uas: 76, akhir: 73 },
+        { subj: "Kimia", uh: 86, uts: 84, uas: 88, akhir: 86 },
+        { subj: "Bahasa Indonesia", uh: 82, uts: 80, uas: 81, akhir: 81 },
+        { subj: "Bahasa Inggris", uh: 85, uts: 83, uas: 84, akhir: 84 },
+        { subj: "PPKn", uh: 83, uts: 82, uas: 85, akhir: 83 },
+      ],
+    },
+    eskul: [
+      { name: "Basket", desc: "Latihan Selasa & Kamis, 15.30–17.00", status: "joined" },
+      { name: "Klub Robotik", desc: "Latihan Jumat, 14.00–16.00", status: "open" },
+      { name: "Paduan Suara", desc: "Latihan Rabu, 15.00–16.30", status: "open" },
+    ],
+  },
+  {
+    nisn: "0091234502", password: "siswa123", waliPassword: "wali123",
+    name: "Naila Rahmawati", kelas: "X IPS 1", wali: "Ibu Wulandari", initials: "NR",
+    grades: {
+      "Ganjil 2025/2026": [
+        { subj: "Matematika Wajib", uh: 76, uts: 72, uas: 78, akhir: 75 },
+        { subj: "Ekonomi", uh: 89, uts: 90, uas: 87, akhir: 89 },
+        { subj: "Sosiologi", uh: 92, uts: 88, uas: 90, akhir: 90 },
+        { subj: "Geografi", uh: 81, uts: 79, uas: 83, akhir: 81 },
+        { subj: "Bahasa Inggris", uh: 85, uts: 82, uas: 86, akhir: 84 },
+        { subj: "PPKn", uh: 88, uts: 85, uas: 87, akhir: 87 },
+      ],
+    },
+    eskul: [
+      { name: "Jurnalistik", desc: "Latihan Senin, 15.00–16.30", status: "joined" },
+      { name: "Basket", desc: "Latihan Selasa & Kamis, 15.30–17.00", status: "open" },
+      { name: "Klub Robotik", desc: "Latihan Jumat, 14.00–16.00", status: "open" },
+    ],
+  },
+  {
+    nisn: "0091234503", password: "siswa123", waliPassword: "wali123",
+    name: "Farhan Maulana", kelas: "XII IPA 1", wali: "Bpk. Ahmad Yusuf", initials: "FM",
+    grades: {
+      "Ganjil 2025/2026": [
+        { subj: "Matematika Peminatan", uh: 95, uts: 92, uas: 94, akhir: 94 },
+        { subj: "Fisika", uh: 90, uts: 88, uas: 91, akhir: 90 },
+        { subj: "Kimia", uh: 93, uts: 90, uas: 92, akhir: 92 },
+        { subj: "Biologi", uh: 89, uts: 87, uas: 90, akhir: 89 },
+        { subj: "Bahasa Inggris", uh: 91, uts: 89, uas: 90, akhir: 90 },
+        { subj: "PPKn", uh: 90, uts: 88, uas: 91, akhir: 90 },
+      ],
+    },
+    eskul: [
+      { name: "Klub Robotik", desc: "Latihan Jumat, 14.00–16.00", status: "joined" },
+      { name: "Paduan Suara", desc: "Latihan Rabu, 15.00–16.30", status: "open" },
+    ],
+  },
+];
+
+const SCHEDULE = {
+  "XI IPA 2": {
+    days: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
+    slots: ["07.00–08.30", "08.30–10.00", "10.15–11.45", "12.30–14.00"],
+    grid: [
+      ["Matematika", "Fisika", "Kimia", "B. Indonesia", "PPKn"],
+      ["Fisika", "Matematika", "B. Inggris", "Kimia", "Olahraga"],
+      ["Kimia", "B. Indonesia", "Matematika", "Fisika", "Seni Budaya"],
+      ["B. Inggris", "PPKn", "Fisika", "Matematika", "BK"],
+    ],
+  },
+  "X IPS 1": {
+    days: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
+    slots: ["07.00–08.30", "08.30–10.00", "10.15–11.45", "12.30–14.00"],
+    grid: [
+      ["Matematika", "Ekonomi", "Sosiologi", "Geografi", "PPKn"],
+      ["Ekonomi", "Matematika", "B. Inggris", "Sosiologi", "Olahraga"],
+      ["Geografi", "Sosiologi", "Matematika", "Ekonomi", "Seni Budaya"],
+      ["B. Inggris", "PPKn", "Geografi", "Matematika", "BK"],
+    ],
+  },
+  "XII IPA 1": {
+    days: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
+    slots: ["07.00–08.30", "08.30–10.00", "10.15–11.45", "12.30–14.00"],
+    grid: [
+      ["Matematika Peminatan", "Fisika", "Kimia", "Biologi", "PPKn"],
+      ["Fisika", "Matematika Peminatan", "B. Inggris", "Kimia", "Olahraga"],
+      ["Kimia", "Biologi", "Matematika Peminatan", "Fisika", "Bimbingan TO"],
+      ["B. Inggris", "PPKn", "Fisika", "Matematika Peminatan", "BK"],
+    ],
+  },
+};
+
+const STUDENTS_KEY = "siakad-students-v1";
+const PPDB_KEY = "siakad-ppdb-v1";
+
+async function loadStudents() {
+  try {
+    const raw = localStorage.getItem(STUDENTS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  localStorage.setItem(STUDENTS_KEY, JSON.stringify(SEED_STUDENTS));
+  return SEED_STUDENTS;
+}
+async function saveStudents(students) {
+  localStorage.setItem(STUDENTS_KEY, JSON.stringify(students));
+}
+async function loadPpdb() {
+  try {
+    const raw = localStorage.getItem(PPDB_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return [];
+}
+async function savePpdb(list) {
+  localStorage.setItem(PPDB_KEY, JSON.stringify(list));
+}
+
+function gradeClass(v){ if (v >= 85) return "good"; if (v >= 75) return "mid"; return "low"; }
+function predikat(v){
+  if (v >= 90) return "A — Sangat Baik";
+  if (v >= 80) return "B — Baik";
+  if (v >= 70) return "C — Cukup";
+  return "D — Perlu Bimbingan";
+}
+
+/* ---------------- Landing Page ---------------- */
+function Landing({ goLogin, goPpdb }) {
+  return (
+    <>
+      <nav className="nav">
+        <div className="brand">
+          <Crest />
+          <div className="brand-text">
+            <div className="name">{SCHOOL}</div>
+            <div className="sub">Sistem Informasi Akademik</div>
+          </div>
+        </div>
+        <div className="nav-links">
+          <a href="#profil">Profil</a>
+          <a href="#akademik">Akademik</a>
+          <a onClick={goPpdb}>PPDB Online</a>
+          <a href="#kontak">Kontak</a>
+          <button className="nav-ghost-cta" onClick={goPpdb}>Daftar Siswa Baru</button>
+          <button className="nav-cta" onClick={goLogin}>Portal Siswa &amp; Wali Murid</button>
+        </div>
+      </nav>
+
+      <section className="hero">
+        <div>
+          <div className="eyebrow">Sistem Informasi Terpadu</div>
+          <h1>Satu portal untuk<br/><em>nilai, jadwal,</em><br/>dan perkembangan siswa.</h1>
+          <p>{SCHOOL} menghadirkan akses digital bagi siswa dan wali murid untuk memantau rapor, jadwal pelajaran, dan kegiatan ekstrakurikuler secara real-time, kapan saja dibutuhkan.</p>
+          <div className="hero-actions">
+            <button className="btn-primary" onClick={goLogin}>Masuk ke Portal →</button>
+            <button className="btn-ghost" onClick={goPpdb}>Pendaftaran Siswa Baru</button>
+          </div>
+        </div>
+        <div className="hero-panel">
+          <div className="ledger-bg-fine"></div>
+          <div className="hero-panel-inner">
+            <div className="hero-panel-label">Ringkasan Tahun Ajaran 2025/2026</div>
+            <div className="stat-row"><span className="label">Total Siswa Aktif</span><span className="val">1.284</span></div>
+            <div className="stat-row"><span className="label">Tenaga Pengajar</span><span className="val">96</span></div>
+            <div className="stat-row"><span className="label">Program Ekstrakurikuler</span><span className="val">18</span></div>
+            <div className="stat-row"><span className="label">Rata-rata Kehadiran</span><span className="val">97.2%</span></div>
+            <div className="stat-row"><span className="label">Akreditasi</span><span className="val">A (Unggul)</span></div>
+          </div>
+        </div>
+      </section>
+
+      <hr className="divider" style={{maxWidth:1280, margin:"0 auto"}}/>
+
+      <section className="section" id="profil">
+        <div className="section-head">
+          <div>
+            <span className="num-eyebrow">01 — TENTANG SEKOLAH</span>
+            <h2>Membentuk kecakapan akademik<br/>dan karakter secara seimbang.</h2>
+          </div>
+          <p>Kurikulum kami dirancang untuk memadukan pencapaian akademik dengan pembentukan karakter, kepemimpinan, dan keterampilan hidup di luar ruang kelas.</p>
+        </div>
+        <div className="card-grid">
+          <div className="info-card">
+            <h3>Akademik</h3>
+            <p>Kurikulum Merdeka dengan penguatan literasi, numerasi, dan pembelajaran berbasis proyek di setiap jenjang.</p>
+          </div>
+          <div className="info-card">
+            <h3>Ekstrakurikuler</h3>
+            <p>18 program pengembangan minat & bakat, dari sains, seni, hingga olahraga, dengan jadwal terintegrasi di portal.</p>
+          </div>
+          <div className="info-card clickable" onClick={goPpdb}>
+            <h3>Penerimaan Siswa Baru →</h3>
+            <p>Pendaftaran online untuk calon siswa tahun ajaran 2026/2027 sudah dibuka. Klik untuk mendaftar atau cek status.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="akademik" style={{paddingTop:0}}>
+        <div className="section-head">
+          <div>
+            <span className="num-eyebrow">02 — PORTAL DIGITAL</span>
+            <h2>Akses nilai & jadwal,<br/>langsung dari satu tempat.</h2>
+          </div>
+          <p>Login sebagai siswa atau orang tua untuk melihat rapor per semester, jadwal pelajaran mingguan, dan status ekstrakurikuler — lengkap dengan opsi cetak rapor ke PDF.</p>
+        </div>
+        <div className="card-grid">
+          <div className="info-card">
+            <h3>Rapor Digital</h3>
+            <p>Nilai harian, UTS, UAS, dan nilai akhir tiap mata pelajaran, tersusun per semester — bisa dicetak/disimpan sebagai PDF.</p>
+          </div>
+          <div className="info-card">
+            <h3>Jadwal Mingguan</h3>
+            <p>Jadwal pelajaran per kelas, diperbarui otomatis mengikuti perubahan kurikulum semester berjalan.</p>
+          </div>
+          <div className="info-card">
+            <h3>Dua Peran Akses</h3>
+            <p>Siswa dapat mendaftar ekstrakurikuler sendiri; orang tua mendapat akses pemantauan penuh untuk semua data anak.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer id="kontak">
+        <div className="foot-grid">
+          <div style={{maxWidth:280}}>
+            <div style={{display:"flex", alignItems:"center", gap:10, marginBottom:14}}>
+              <Crest size={30} light={false}/>
+              <span className="serif" style={{fontSize:15, fontWeight:600}}>{SCHOOL}</span>
+            </div>
+            <p style={{fontSize:13, lineHeight:1.7, color:"#8FA0B2"}}>Portal proyek demo — dibangun sebagai contoh sistem informasi sekolah oleh imm.creates.</p>
+          </div>
+          <div>
+            <h4>Kontak</h4>
+            <p style={{fontSize:13, color:"#8FA0B2", lineHeight:2}}>Jl. Pendidikan Raya No. 45<br/>Surabaya, Jawa Timur<br/>info@cakrawalabangsa.sch.id</p>
+          </div>
+          <div>
+            <h4>Portal</h4>
+            <p style={{fontSize:13, color:"#8FA0B2", lineHeight:2, cursor:"pointer"}} onClick={goLogin}>Login Siswa & Wali Murid →</p>
+            <p style={{fontSize:13, color:"#8FA0B2", lineHeight:2, cursor:"pointer"}} onClick={goPpdb}>PPDB Online →</p>
+          </div>
+        </div>
+        <div className="foot-bottom">
+          <span>© 2026 {SCHOOL} — Demo project by imm.creates</span>
+          <span>Sistem Informasi Akademik Terpadu</span>
+        </div>
+      </footer>
+    </>
+  );
+}
+
+/* ---------------- Login Page ---------------- */
+function LoginPage({ students, onLogin, goHome }) {
+  const [role, setRole] = useState("siswa");
+  const [nisn, setNisn] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setTimeout(() => {
+      const found = students.find(s => s.nisn === nisn.trim() &&
+        (role === "siswa" ? s.password === password : s.waliPassword === password));
+      if (found) {
+        onLogin(found, role);
+      } else {
+        setError("NISN atau kata sandi tidak sesuai untuk peran yang dipilih.");
+      }
+      setLoading(false);
+    }, 400);
+  };
+
+  const fillDemo = (s) => { setNisn(s.nisn); setPassword(role === "siswa" ? s.password : s.waliPassword); };
+
+  return (
+    <div className="auth-wrap">
+      <div className="auth-card narrow">
+        <div className="login-crest"><Crest size={44} /></div>
+        <h2>{SCHOOL}</h2>
+        <div className="sub">Portal Siswa &amp; Wali Murid</div>
+
+        <div className="role-toggle">
+          <button className={role==="siswa" ? "active" : ""} onClick={()=>setRole("siswa")} type="button">Saya Siswa</button>
+          <button className={role==="orangtua" ? "active" : ""} onClick={()=>setRole("orangtua")} type="button">Saya Orang Tua</button>
+        </div>
+
+        {error && <div className="alert error">{error}</div>}
+
+        <form onSubmit={submit}>
+          <div className="field">
+            <label>NISN {role === "orangtua" ? "Putra/Putri" : ""}</label>
+            <input value={nisn} onChange={e=>setNisn(e.target.value)} placeholder="Contoh: 0091234501" required />
+          </div>
+          <div className="field">
+            <label>Kata Sandi {role === "orangtua" ? "Wali" : ""}</label>
+            <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" required />
+          </div>
+          <button className="btn-block" disabled={loading}>{loading ? "Memeriksa..." : "Masuk ke Portal"}</button>
+        </form>
+
+        <div className="demo-box">
+          <div className="t">Akun demo — {role === "siswa" ? "login siswa" : "login orang tua"} (klik untuk isi otomatis)</div>
+          {students.map(s => (
+            <div className="demo-acc" key={s.nisn} onClick={()=>fillDemo(s)}>
+              <span>{s.name} — {s.kelas}</span>
+              <span>{s.nisn}</span>
+            </div>
+          ))}
+        </div>
+
+        <a className="back-link" onClick={goHome}>← Kembali ke Beranda</a>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- PPDB Page ---------------- */
+function PpdbPage({ goHome, goLogin }) {
+  const [mode, setMode] = useState("daftar"); // daftar | cek
+  const [list, setList] = useState([]);
+  const [ready, setReady] = useState(false);
+  const [form, setForm] = useState({
+    nama:"", asalSekolah:"", nisnAsal:"", jenjang:"Kelas X",
+    namaOrtu:"", noHp:"", email:"", alamat:""
+  });
+  const [regNumber, setRegNumber] = useState(null);
+  const [cekNomor, setCekNomor] = useState("");
+  const [cekResult, setCekResult] = useState(undefined); // undefined = belum cek, null = not found
+
+  useEffect(() => { loadPpdb().then(l => { setList(l); setReady(true); }); }, []);
+
+  const update = (k,v) => setForm(f => ({...f,[k]:v}));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const year = new Date().getFullYear();
+    const seq = String(list.length + 1).padStart(4, "0");
+    const nomor = `PPDB-${year}-${seq}`;
+    const entry = { nomor, ...form, tanggal: new Date().toLocaleDateString("id-ID"), status: "Menunggu Verifikasi Berkas" };
+    const updated = [...list, entry];
+    setList(updated);
+    await savePpdb(updated);
+    setRegNumber(nomor);
+  };
+
+  const cekStatus = () => {
+    const found = list.find(l => l.nomor.toLowerCase() === cekNomor.trim().toLowerCase());
+    setCekResult(found || null);
+  };
+
+  if (!ready) return <div className="auth-wrap"><div className="mono" style={{color:"var(--navy-700)"}}>Memuat data pendaftaran...</div></div>;
+
+  return (
+    <div className="auth-wrap">
+      <div className="auth-card wide">
+        <div className="login-crest"><Crest size={44} /></div>
+        <h2>Penerimaan Siswa Baru</h2>
+        <div className="sub">{SCHOOL} · Tahun Ajaran 2026/2027</div>
+
+        <div className="ppdb-tabs">
+          <div className={"ppdb-tab" + (mode==="daftar" ? " active" : "")} onClick={()=>{setMode("daftar"); setRegNumber(null);}}>Formulir Pendaftaran</div>
+          <div className={"ppdb-tab" + (mode==="cek" ? " active" : "")} onClick={()=>setMode("cek")}>Cek Status Pendaftaran</div>
+        </div>
+
+        {mode === "daftar" && !regNumber && (
+          <form onSubmit={submit}>
+            <div className="field">
+              <label>Nama Lengkap Calon Siswa</label>
+              <input required value={form.nama} onChange={e=>update("nama", e.target.value)} placeholder="Sesuai akta kelahiran" />
+            </div>
+            <div className="field-row">
+              <div className="field">
+                <label>Asal Sekolah</label>
+                <input required value={form.asalSekolah} onChange={e=>update("asalSekolah", e.target.value)} placeholder="Nama SMP/MTs" />
+              </div>
+              <div className="field">
+                <label>NISN Asal (opsional)</label>
+                <input value={form.nisnAsal} onChange={e=>update("nisnAsal", e.target.value)} placeholder="10 digit" />
+              </div>
+            </div>
+            <div className="field">
+              <label>Mendaftar untuk</label>
+              <select value={form.jenjang} onChange={e=>update("jenjang", e.target.value)}>
+                <option>Kelas X</option>
+                <option>Pindahan — Kelas XI</option>
+                <option>Pindahan — Kelas XII</option>
+              </select>
+            </div>
+            <div className="field-row">
+              <div className="field">
+                <label>Nama Orang Tua / Wali</label>
+                <input required value={form.namaOrtu} onChange={e=>update("namaOrtu", e.target.value)} />
+              </div>
+              <div className="field">
+                <label>No. WhatsApp Aktif</label>
+                <input required value={form.noHp} onChange={e=>update("noHp", e.target.value)} placeholder="08xxxxxxxxxx" />
+              </div>
+            </div>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" required value={form.email} onChange={e=>update("email", e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Alamat Domisili</label>
+              <textarea value={form.alamat} onChange={e=>update("alamat", e.target.value)} placeholder="Alamat lengkap tempat tinggal saat ini" />
+            </div>
+            <button className="btn-block">Kirim Pendaftaran</button>
+          </form>
+        )}
+
+        {mode === "daftar" && regNumber && (
+          <div>
+            <div className="alert success">Pendaftaran berhasil disimpan. Simpan nomor pendaftaran Anda di bawah ini.</div>
+            <div className="reg-number">{regNumber}</div>
+            <p style={{fontSize:13, color:"var(--ink-soft)", lineHeight:1.7, marginBottom:20}}>
+              Tim kami akan menghubungi <strong>{form.namaOrtu}</strong> melalui WhatsApp ({form.noHp}) dalam 2×24 jam untuk proses verifikasi berkas dan jadwal tes seleksi. Anda juga dapat mengecek status kapan saja lewat tab "Cek Status Pendaftaran".
+            </p>
+            <button className="btn-block secondary" onClick={goHome}>Kembali ke Beranda</button>
+          </div>
+        )}
+
+        {mode === "cek" && (
+          <div>
+            <div className="field">
+              <label>Nomor Pendaftaran</label>
+              <input value={cekNomor} onChange={e=>setCekNomor(e.target.value)} placeholder="PPDB-2026-0001" />
+            </div>
+            <button className="btn-block" onClick={cekStatus} type="button">Cek Status</button>
+
+            {cekResult === null && <div className="alert error" style={{marginTop:18}}>Nomor pendaftaran tidak ditemukan. Periksa kembali penulisannya.</div>}
+
+            {cekResult && (
+              <div style={{marginTop:20}}>
+                <div className="status-row"><span className="k">Nama Calon Siswa</span><span className="v">{cekResult.nama}</span></div>
+                <div className="status-row"><span className="k">Asal Sekolah</span><span className="v">{cekResult.asalSekolah}</span></div>
+                <div className="status-row"><span className="k">Mendaftar untuk</span><span className="v">{cekResult.jenjang}</span></div>
+                <div className="status-row"><span className="k">Tanggal Daftar</span><span className="v">{cekResult.tanggal}</span></div>
+                <div className="status-row"><span className="k">Status</span><span className="v" style={{color:"var(--gold)"}}>{cekResult.status}</span></div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <a className="back-link" onClick={goHome}>← Kembali ke Beranda</a>
+        {mode!=="daftar" || !regNumber ? (
+          <a className="back-link" onClick={goLogin} style={{marginTop:6}}>Sudah jadi siswa? Masuk ke Portal →</a>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Print Rapor Template ---------------- */
+function RaporPrint({ student, sem }) {
+  if (!student) return null;
+  const rows = student.grades[sem] || [];
+  const today = new Date().toLocaleDateString("id-ID", { day:"numeric", month:"long", year:"numeric" });
+  return (
+    <div id="rapor-print" className="print-only">
+      <div className="rp-head">
+        <Crest size={40} light={false} />
+        <div>
+          <h2>{SCHOOL}</h2>
+          <div className="rp-sub">Laporan Hasil Belajar Siswa — {sem}</div>
+        </div>
+      </div>
+      <div className="rp-bio">
+        <div><span className="k">Nama Siswa</span>: {student.name}</div>
+        <div><span className="k">NISN</span>: {student.nisn}</div>
+        <div><span className="k">Kelas</span>: {student.kelas}</div>
+        <div><span className="k">Wali Kelas</span>: {student.wali}</div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Mata Pelajaran</th><th>Harian</th><th>UTS</th><th>UAS</th><th>Nilai Akhir</th><th>KKM</th><th>Predikat</th></tr>
+        </thead>
+        <tbody>
+          {rows.map((g,i) => (
+            <tr key={i}>
+              <td>{g.subj}</td><td>{g.uh}</td><td>{g.uts}</td><td>{g.uas}</td>
+              <td>{g.akhir}</td><td>{KKM}</td><td>{predikat(g.akhir)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="rp-sign">
+        <div>Orang Tua / Wali<div className="line">{student.wali}</div></div>
+        <div>Wali Kelas {student.kelas}<div className="line">( ......................... )</div></div>
+        <div>Surabaya, {today}<br/>Kepala Sekolah<div className="line">( ......................... )</div></div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Dashboard ---------------- */
+function Dashboard({ student, role, students, setStudents, onLogout }) {
+  const [tab, setTab] = useState("nilai");
+  const semesters = Object.keys(student.grades);
+  const [sem, setSem] = useState(semesters[0]);
+  const sched = SCHEDULE[student.kelas] || SCHEDULE["XI IPA 2"];
+  const current = students.find(s => s.nisn === student.nisn) || student;
+
+  const toggleEskul = async (idx) => {
+    if (role !== "siswa") return;
+    const updated = students.map(s => {
+      if (s.nisn !== student.nisn) return s;
+      const eskul = s.eskul.map((e,i) => i===idx ? {...e, status: e.status === "joined" ? "open" : "joined"} : e);
+      return {...s, eskul};
+    });
+    setStudents(updated);
+    await saveStudents(updated);
+  };
+
+  const cetakRapor = () => window.print();
+
+  return (
+    <div className="dash">
+      <aside className="sidebar">
+        <div className="who">
+          <div className="avatar">{current.initials}</div>
+          <div className="n">{current.name}</div>
+          <div className="r">{current.kelas} · {role === "siswa" ? "Akun Siswa" : `Wali: ${current.wali}`}</div>
+          <div className="role-pill">{role === "siswa" ? "Login Siswa" : "Login Orang Tua"}</div>
+        </div>
+        <a className={"side-link" + (tab==="nilai" ? " active" : "")} onClick={()=>setTab("nilai")}><span className="ic">01</span> Nilai / Rapor</a>
+        <a className={"side-link" + (tab==="jadwal" ? " active" : "")} onClick={()=>setTab("jadwal")}><span className="ic">02</span> Jadwal Pelajaran</a>
+        <a className={"side-link" + (tab==="eskul" ? " active" : "")} onClick={()=>setTab("eskul")}><span className="ic">03</span> Ekstrakurikuler</a>
+        <div className="sidebar-bottom">
+          <button className="logout-btn" onClick={onLogout}>Keluar</button>
+        </div>
+      </aside>
+
+      <main className="dash-main">
+        <div className="dash-head">
+          <div>
+            <div className="eyebrow2">NISN {current.nisn} · {SCHOOL}</div>
+            <h1>{tab==="nilai" ? "Nilai & Rapor" : tab==="jadwal" ? "Jadwal Pelajaran" : "Ekstrakurikuler"}</h1>
+          </div>
+          {tab === "nilai" && (
+            <button className="print-btn" onClick={cetakRapor}>⬇ Cetak Rapor (PDF)</button>
+          )}
+        </div>
+
+        {role === "orangtua" && tab === "eskul" && (
+          <div className="note-box">Akun orang tua bersifat pantau saja — pendaftaran/pembatalan ekstrakurikuler hanya dapat dilakukan melalui akun siswa.</div>
+        )}
+
+        {tab === "nilai" && (
+          <>
+            <div className="sem-tabs">
+              {semesters.map(s => (
+                <button key={s} className={"sem-tab" + (s===sem ? " active" : "")} onClick={()=>setSem(s)}>{s}</button>
+              ))}
+            </div>
+            <div className="tab-panel">
+              <table className="grades">
+                <thead>
+                  <tr><th>Mata Pelajaran</th><th>Harian</th><th>UTS</th><th>UAS</th><th>Nilai Akhir</th></tr>
+                </thead>
+                <tbody>
+                  {current.grades[sem].map((g,i) => (
+                    <tr key={i}>
+                      <td>{g.subj}</td>
+                      <td className="mono">{g.uh}</td>
+                      <td className="mono">{g.uts}</td>
+                      <td className="mono">{g.uas}</td>
+                      <td><span className={"grade-val " + gradeClass(g.akhir)}>{g.akhir}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {tab === "jadwal" && (
+          <div className="tab-panel panel-pad">
+            <div className="schedule-grid">
+              <div className="sched-h"></div>
+              {sched.days.map(d => <div className="sched-h" key={d}>{d}</div>)}
+              {sched.slots.map((slot, r) => (
+                <React.Fragment key={slot}>
+                  <div className="sched-time">{slot}</div>
+                  {sched.days.map((d, c) => (
+                    <div className="sched-cell filled" key={d+c}>
+                      <div className="subj">{sched.grid[r][c]}</div>
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {tab === "eskul" && (
+          <div className="tab-panel">
+            <div className="eskul-list">
+              {current.eskul.map((e, i) => (
+                <div className="eskul-item" key={i}>
+                  <div>
+                    <div className="name">{e.name}</div>
+                    <div className="desc">{e.desc}</div>
+                  </div>
+                  <div style={{display:"flex", flexDirection:"column", gap:8, alignItems:"flex-end"}}>
+                    <span className={"badge " + e.status}>{e.status==="joined" ? "Diikuti" : "Tersedia"}</span>
+                    <button className="eskul-action" disabled={role!=="siswa"} onClick={()=>toggleEskul(i)}>
+                      {e.status==="joined" ? "Keluar" : "Daftar"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </main>
+
+      <RaporPrint student={current} sem={sem} />
+    </div>
+  );
+}
+
+/* ---------------- App ---------------- */
+function App() {
+  const [view, setView] = useState("landing"); // landing | login | ppdb | dashboard
+  const [students, setStudents] = useState([]);
+  const [current, setCurrent] = useState(null);
+  const [role, setRole] = useState("siswa");
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => { loadStudents().then(s => { setStudents(s); setReady(true); }); }, []);
+
+  if (!ready) {
+    return (
+      <div style={{display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", color:"var(--navy-700)", fontFamily:"IBM Plex Mono, monospace", fontSize:13}}>
+        Memuat data akademik...
+      </div>
+    );
+  }
+
+  if (view === "landing") return <Landing goLogin={()=>setView("login")} goPpdb={()=>setView("ppdb")} />;
+
+  if (view === "ppdb") return <PpdbPage goHome={()=>setView("landing")} goLogin={()=>setView("login")} />;
+
+  if (view === "login") return (
+    <LoginPage
+      students={students}
+      goHome={()=>setView("landing")}
+      onLogin={(s, r)=>{ setCurrent(s); setRole(r); setView("dashboard"); }}
+    />
+  );
+
+  return (
+    <Dashboard
+      student={current}
+      role={role}
+      students={students}
+      setStudents={setStudents}
+      onLogout={()=>{ setCurrent(null); setView("landing"); }}
+    />
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
