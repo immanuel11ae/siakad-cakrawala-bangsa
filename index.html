@@ -565,16 +565,15 @@ function LoginPage({ onLogin, goHome }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const submit = async (e) => {
-    e.preventDefault();
+  const doLogin = async (useNisn, usePassword, useRole) => {
     setLoading(true);
     setError("");
     try {
-      const found = role === "siswa"
-        ? await loginSiswa(nisn.trim(), password)
-        : await loginWali(nisn.trim(), password);
+      const found = useRole === "siswa"
+        ? await loginSiswa(useNisn.trim(), usePassword)
+        : await loginWali(useNisn.trim(), usePassword);
       if (found) {
-        onLogin({ id: found.student_id, nisn: nisn.trim(), name: found.nama, kelas: found.kelas, wali: found.wali_nama, initials: found.initials }, role);
+        onLogin({ id: found.student_id, nisn: useNisn.trim(), name: found.nama, kelas: found.kelas, wali: found.wali_nama, initials: found.initials }, useRole);
       } else {
         setError("NISN atau kata sandi tidak sesuai untuk peran yang dipilih.");
       }
@@ -584,7 +583,20 @@ function LoginPage({ onLogin, goHome }) {
     setLoading(false);
   };
 
-  const fillDemo = (s) => { setNisn(s.nisn); setPassword(role === "siswa" ? s.password : s.waliPassword); };
+  const submit = (e) => {
+    e.preventDefault();
+    doLogin(nisn, password, role);
+  };
+
+  // Clicking a demo account fills the fields AND logs in immediately —
+  // avoids a Chrome quirk where password dots render visually before the
+  // field's real value updates, which used to trip the "fill this field" check.
+  const fillDemo = (s) => {
+    const pwd = role === "siswa" ? s.password : s.waliPassword;
+    setNisn(s.nisn);
+    setPassword(pwd);
+    doLogin(s.nisn, pwd, role);
+  };
 
   return (
     <div className="auth-wrap">
@@ -613,7 +625,8 @@ function LoginPage({ onLogin, goHome }) {
         </form>
 
         <div className="demo-box">
-          <div className="t">Akun demo — {role === "siswa" ? "login siswa" : "login orang tua"} (klik untuk isi otomatis)</div>
+          <div className="t">Akun demo — {role === "siswa" ? "login siswa" : "login orang tua"} (klik untuk langsung masuk)</div>
+          {loading && <div style={{fontSize:11.5, color:"var(--navy-700)", marginBottom:8}}>Memeriksa...</div>}
           {DEMO_ACCOUNTS.map(s => (
             <div className="demo-acc" key={s.nisn} onClick={()=>fillDemo(s)}>
               <span>{s.name} — {s.kelas}</span>
