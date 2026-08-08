@@ -778,7 +778,9 @@ function PpdbPage({ goHome, goLogin }) {
           </div>
         )}
 
-        <a className="back-link" onClick={goHome}>← Kembali ke Beranda</a>
+        {!(mode==="daftar" && regNumber) && (
+          <a className="back-link" onClick={goHome}>← Kembali ke Beranda</a>
+        )}
         {mode!=="daftar" || !regNumber ? (
           <a className="back-link" onClick={goLogin} style={{marginTop:6}}>Sudah jadi siswa? Masuk ke Portal →</a>
         ) : null}
