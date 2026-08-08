@@ -212,8 +212,12 @@
 
   .demo-box{margin-top:26px;padding:16px;background:var(--paper);border:1px dashed var(--paper-line);border-radius:2px;}
   .demo-box .t{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--navy-700);font-weight:600;margin-bottom:9px;}
-  .demo-acc{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12.5px;padding:5px 0;color:var(--ink-soft);}
-  .demo-acc:hover{color:var(--navy-900);}
+  .demo-acc{
+    display:flex;width:100%;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+    padding:7px 6px;color:var(--ink-soft);background:none;border:none;border-radius:2px;text-align:left;
+  }
+  .demo-acc:hover{color:var(--navy-900);background:rgba(15,42,74,.06);}
+  .demo-acc:disabled{opacity:.5;cursor:default;}
   .back-link{display:block;text-align:center;margin-top:20px;font-size:13px;color:var(--navy-700);}
   .back-link:hover{text-decoration:underline;}
 
@@ -615,23 +619,23 @@ function LoginPage({ onLogin, goHome }) {
         <form onSubmit={submit}>
           <div className="field">
             <label>NISN {role === "orangtua" ? "Putra/Putri" : ""}</label>
-            <input value={nisn} onChange={e=>setNisn(e.target.value)} placeholder="Contoh: 0091234501" required />
+            <input value={nisn} onChange={e=>setNisn(e.target.value)} placeholder="Contoh: 0091234501" autoComplete="off" required />
           </div>
           <div className="field">
             <label>Kata Sandi {role === "orangtua" ? "Wali" : ""}</label>
-            <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" required />
+            <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" autoComplete="new-password" required />
           </div>
           <button className="btn-block" disabled={loading}>{loading ? "Memeriksa..." : "Masuk ke Portal"}</button>
         </form>
 
         <div className="demo-box">
-          <div className="t">Akun demo — {role === "siswa" ? "login siswa" : "login orang tua"} (klik untuk langsung masuk)</div>
+          <div className="t">Akun demo — {role === "siswa" ? "login siswa" : "login orang tua"} (klik baris untuk langsung masuk)</div>
           {loading && <div style={{fontSize:11.5, color:"var(--navy-700)", marginBottom:8}}>Memeriksa...</div>}
           {DEMO_ACCOUNTS.map(s => (
-            <div className="demo-acc" key={s.nisn} onClick={()=>fillDemo(s)}>
+            <button type="button" className="demo-acc" key={s.nisn} onClick={()=>fillDemo(s)} disabled={loading}>
               <span>{s.name} — {s.kelas}</span>
               <span>{s.nisn}</span>
-            </div>
+            </button>
           ))}
         </div>
 
